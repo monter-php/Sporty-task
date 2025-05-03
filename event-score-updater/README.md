@@ -21,8 +21,7 @@ more info in [docs/flows.md](docs/flows.md) and [docs/sequences.md](docs/sequenc
 - Java 17+
 - Maven 3.6+
 - Kafka (local or remote instance)
-
-
+- Docker (for containerized testing)
 
 ## Configuration
 - Kafka and external API endpoints are configured in `src/main/resources/application.properties`.
@@ -31,7 +30,28 @@ more info in [docs/flows.md](docs/flows.md) and [docs/sequences.md](docs/sequenc
   { "eventId": "1234", "currentScore": "0:0" }
   ```
 
+## Running Tests
+
+### Locally
+To run tests locally using Maven:
+```bash
+mvn clean test
+```
+
+### Using Docker
+A dedicated Dockerfile for testing is provided to ensure consistent test environments:
+
+1. Build the test Docker image:
+```bash
+docker build -f Dockerfile.test -t event-score-updater-test .
+```
+
+2. Run tests in the container:
+```bash
+docker run --rm event-score-updater-test
+```
+
+This approach ensures tests run in an isolated environment that matches the development configuration.
 
 ## AI Usage
 Some code and documentation were generated or assisted by AI tools (e.g., ChatGPT, GitHub Copilot). All outputs were reviewed and validated.
-

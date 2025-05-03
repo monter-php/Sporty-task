@@ -1,0 +1,12 @@
+FROM maven:3.9-amazoncorretto-21-debian
+
+WORKDIR /app
+
+# Copy the POM file first for better layer caching
+COPY pom.xml .
+
+# Copy source code
+COPY src ./src
+
+# Run tests
+CMD ["mvn", "clean", "test"]

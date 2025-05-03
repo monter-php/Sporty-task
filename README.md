@@ -46,10 +46,4 @@ This will build the necessary Docker images and start the `dashboard`, `score-se
 
 ## Running tests
 
-To run unit and integration tests in the Event Score Updater service, follow these steps:
-
-1. You must have Maven installed and configured.
-2. Navigate to the `event-score-updater` directory.
-3. Execute the following commands:
-	1. `mvn clean install`
-	2. `mvn test`
+Instructions how to run tests are in [event-score-updater/README.md](README.md) file inside event-score-updater directory.
