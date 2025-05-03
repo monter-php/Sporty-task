@@ -1,22 +1,21 @@
 package com.tgi.sporty.api.event;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tgi.sporty.domain.event.EventStatus;
+import com.tgi.sporty.domain.event.EventStatusService;
+import com.tgi.sporty.domain.event.EventStatusUpdate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.bean.override.mockito.MockitoBean; // Use MockitoBean
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tgi.sporty.domain.event.EventStatusService;
-import com.tgi.sporty.domain.event.EventStatus;
-import com.tgi.sporty.domain.event.EventStatusUpdate;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(classes = com.tgi.sporty.application.SportyApplication.class)
@@ -26,10 +25,10 @@ public class EventControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean // Use MockitoBean for service dependencies in @WebMvcTest
+    @MockitoBean
     private EventStatusService eventStatusService;
 
-    @MockitoBean // Use MockitoBean for KafkaTemplate as it's an external dependency
+    @MockitoBean
     private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
@@ -38,19 +37,16 @@ public class EventControllerTest {
     @Test
     public void testCreateEvent() throws Exception {
         EventStatusUpdateRequest eventData = new EventStatusUpdateRequest("123", "live");
-        EventStatus updatedStatus = EventStatus.LIVE; // Assuming LIVE is a valid status
+        EventStatus updatedStatus = EventStatus.LIVE;
 
-        // Mock the behavior of EventStatusService.updateEventStatus
         when(eventStatusService.updateEventStatus(any(EventStatusUpdate.class))).thenReturn(updatedStatus);
 
-
         mockMvc.perform(post("/events/status")
-                .content(asJsonString(eventData))
-                .contentType("application/json"))
+                        .content(asJsonString(eventData))
+                        .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.eventId").value("123"));
 
-        // Verify that the service method was called
         verify(eventStatusService).updateEventStatus(any(EventStatusUpdate.class));
     }
 
@@ -67,11 +63,10 @@ public class EventControllerTest {
         String invalidStatusJson = "{\"eventId\": \"123\", \"status\": \"invalid\"}";
 
         mockMvc.perform(post("/events/status")
-                .content(invalidStatusJson)
-                .contentType("application/json"))
+                        .content(invalidStatusJson)
+                        .contentType("application/json"))
                 .andExpect(status().isBadRequest());
 
-        // Verify that the service method was NOT called for invalid input
         verifyNoInteractions(eventStatusService);
     }
 }

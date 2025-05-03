@@ -1,14 +1,12 @@
 package com.tgi.sporty.infrastructure.score;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.retry.support.RetryTemplate;
-
 import com.tgi.sporty.domain.score.Score;
 import com.tgi.sporty.domain.score.ScoreRepository;
-
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.support.RetryTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
 
 @Repository
 @Slf4j
@@ -26,7 +24,7 @@ public class ScoreRestRepository implements ScoreRepository {
             throw new IllegalArgumentException("Event ID cannot be null or empty");
         }
         String url = scoreServiceParameters.getScoreServiceUrl(eventId);
-        
+
         try {
             log.info("Fetching score from URL: {}", url);
             return retryTemplate.execute(context -> {
@@ -43,7 +41,7 @@ public class ScoreRestRepository implements ScoreRepository {
             });
         } catch (Exception e) {
             log.error("All retry attempts failed to fetch score for eventId {}: {}", eventId, e.getMessage());
-            return null; 
+            return null;
         }
     }
 }

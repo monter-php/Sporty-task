@@ -18,7 +18,7 @@ class ScoreRestRepositoryTest {
 
     @Mock
     private RestTemplate restTemplate;
-    
+
     @Mock
     private RetryTemplate retryTemplate;
 
@@ -34,21 +34,21 @@ class ScoreRestRepositoryTest {
 
     @Test
     void getScoreForEvent_success() {
-        // Setup
+        // Arrange
         String eventId = "event123";
         Score mockScore = new Score();
         String url = scoreServiceParameters.getScoreServiceUrl(eventId);
-        
+
         when(restTemplate.getForObject(url, Score.class)).thenReturn(mockScore);
         when(retryTemplate.execute(any(RetryCallback.class))).thenAnswer(invocation -> {
             RetryCallback<Object, Exception> callback = invocation.getArgument(0);
             return callback.doWithRetry(mock(RetryContext.class));
         });
 
-        // Execute
+        // Act
         Score result = scoreRestRepository.getScoreForEvent(eventId);
-        
-        // Verify
+
+        // Assert
         assertNotNull(result);
         assertEquals(mockScore, result);
         verify(restTemplate, times(1)).getForObject(url, Score.class);
@@ -71,10 +71,10 @@ class ScoreRestRepositoryTest {
 
     @Test
     void getScoreForEvent_restTemplateThrowsException_returnsNull() {
-        // Setup
+        // Arrange
         String eventId = "event123";
         String url = scoreServiceParameters.getScoreServiceUrl(eventId);
-        
+
         when(restTemplate.getForObject(url, Score.class)).thenThrow(new RuntimeException("REST error"));
         when(retryTemplate.execute(any(RetryCallback.class))).thenAnswer(invocation -> {
             RetryCallback<Object, Exception> callback = invocation.getArgument(0);
@@ -85,33 +85,33 @@ class ScoreRestRepositoryTest {
             }
         });
 
-        // Execute
+        // Act
         Score result = scoreRestRepository.getScoreForEvent(eventId);
-        
-        // Verify
+
+        // Assert
         assertNull(result);
         verify(restTemplate, times(1)).getForObject(url, Score.class);
         verify(retryTemplate, times(1)).execute(any(RetryCallback.class));
     }
-    
+
     @Test
     void getScoreForEvent_retryOnFailure() {
-        // Setup
+        // Arrange
         String eventId = "event123";
         Score mockScore = new Score();
         String url = scoreServiceParameters.getScoreServiceUrl(eventId);
-        
+
         // First call throws exception, second call returns mockScore
         when(restTemplate.getForObject(url, Score.class))
-            .thenThrow(new RuntimeException("Temporary error"))
-            .thenReturn(mockScore);
-            
+                .thenThrow(new RuntimeException("Temporary error"))
+                .thenReturn(mockScore);
+
         // Mock retry behavior
         when(retryTemplate.execute(any(RetryCallback.class))).thenAnswer(invocation -> {
             RetryCallback<Object, Exception> callback = invocation.getArgument(0);
             RetryContext mockContext = mock(RetryContext.class);
             when(mockContext.getRetryCount()).thenReturn(1); // Simulate second attempt
-            
+
             try {
                 return callback.doWithRetry(mockContext);
             } catch (Exception e) {
@@ -122,10 +122,10 @@ class ScoreRestRepositoryTest {
             }
         });
 
-        // Execute
+        // Act
         Score result = scoreRestRepository.getScoreForEvent(eventId);
-        
-        // Verify
+
+        // Assert
         assertNotNull(result);
         assertEquals(mockScore, result);
         verify(retryTemplate, times(1)).execute(any(RetryCallback.class));

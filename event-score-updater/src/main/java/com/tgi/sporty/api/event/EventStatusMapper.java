@@ -1,10 +1,9 @@
 package com.tgi.sporty.api.event;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
 import com.tgi.sporty.domain.event.EventStatus;
 import com.tgi.sporty.domain.event.EventStatusUpdate;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface EventStatusMapper {

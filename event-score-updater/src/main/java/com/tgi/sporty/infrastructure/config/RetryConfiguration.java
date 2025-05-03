@@ -25,19 +25,19 @@ public class RetryConfiguration {
     @Bean
     public RetryTemplate retryTemplate() {
         RetryTemplate retryTemplate = new RetryTemplate();
-        
+
         // Configure retry policy
         SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
         retryPolicy.setMaxAttempts(maxAttempts);
         retryTemplate.setRetryPolicy(retryPolicy);
-        
+
         // Configure backoff policy
         ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
         backOffPolicy.setInitialInterval(initialBackoff);
         backOffPolicy.setMultiplier(multiplier);
         backOffPolicy.setMaxInterval(maxBackoff);
         retryTemplate.setBackOffPolicy(backOffPolicy);
-        
+
         return retryTemplate;
     }
 }

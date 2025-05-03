@@ -19,8 +19,8 @@ public class EventController {
 
     @PostMapping("/events/status")
     public ResponseEntity<EventStatusUpdateResponse> updateStatusEvent(@RequestBody EventStatusUpdateRequest eventData) {
-            EventStatusUpdate eventStatusUpdate = eventStatusMapper.mapRequest(eventData);
-            EventStatus eventStatus = eventStatusService.updateEventStatus(eventStatusUpdate);
-            return ResponseEntity.ok(new EventStatusUpdateResponse(eventData.getEventId(), eventStatus));
+        EventStatusUpdate eventStatusUpdate = eventStatusMapper.mapRequest(eventData);
+        EventStatus eventStatus = eventStatusService.updateEventStatus(eventStatusUpdate);
+        return ResponseEntity.ok(new EventStatusUpdateResponse(eventData.getEventId(), eventStatus));
     }
 }

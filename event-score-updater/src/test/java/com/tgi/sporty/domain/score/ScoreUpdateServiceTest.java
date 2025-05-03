@@ -6,7 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class ScoreUpdateServiceTest {
@@ -29,9 +30,9 @@ public class ScoreUpdateServiceTest {
     void testUpdateScoreForEvent_ValidEventId_ScoreUpdatedAndNotified() {
         // Arrange
         String eventId = "event1";
-        Score mockScore = new Score(); // Assuming Score has a no-arg constructor or setters
+        Score mockScore = new Score();
         mockScore.setEventId(eventId);
-        mockScore.setCurrentScore("1:0"); // Set the score as a String
+        mockScore.setCurrentScore("1:0");
 
         when(scoreRepository.getScoreForEvent(eventId)).thenReturn(mockScore);
 
@@ -70,18 +71,16 @@ public class ScoreUpdateServiceTest {
     }
 
     @Test
-    void testUpdateScoreForEvent_ScoreNotFound_LogsWarningAndDoesNotNotify() {
+    void testUpdateScoreForEvent_ScoreNotFound_ThrowsScoreNotFoundException() {
         // Arrange
         String eventId = "nonexistentEvent";
         when(scoreRepository.getScoreForEvent(eventId)).thenReturn(null);
 
-        // Act
-        scoreUpdateService.updateScoreForEvent(eventId);
-
-        // Assert
+        // Act & Assert
+        ScoreNotFoundException exception = assertThrows(ScoreNotFoundException.class, () ->
+                scoreUpdateService.updateScoreForEvent(eventId));
+        assertEquals("Score not found for eventId: " + eventId, exception.getMessage());
         verify(scoreRepository).getScoreForEvent(eventId);
         verify(scoreUpdateNotifyService, never()).sendScoreUpdateNotification(any(ScoreUpdateMessage.class));
-        // Note: Verifying log messages with Mockito requires additional setup (e.g., using Logback test appenders)
-        // This test primarily verifies that notification is NOT sent when score is null.
     }
 }

@@ -1,17 +1,15 @@
 package com.tgi.sporty.infrastructure.score;
 
-import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
-
+import com.tgi.sporty.domain.score.ScoreUpdateService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-
-import com.tgi.sporty.domain.score.ScoreUpdateService;
+import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
 
 @Slf4j
 @Service
@@ -25,8 +23,8 @@ public class ScoreUpdateTasksManager {
     public void startTask(String taskId) {
         log.info("Starting task: {}", taskId);
         ScheduledFuture<?> future = taskScheduler.scheduleAtFixedRate(
-            () -> scoreUpdateService.updateScoreForEvent(taskId),
-            Duration.ofSeconds(10)
+                () -> scoreUpdateService.updateScoreForEvent(taskId),
+                Duration.ofSeconds(10)
         );
         tasks.put(taskId, future);
     }
@@ -34,7 +32,7 @@ public class ScoreUpdateTasksManager {
     public void stopTask(String taskId) {
         log.info("Stopping task: {}", taskId);
         ScheduledFuture<?> future = tasks.get(taskId);
-        if(future != null) {
+        if (future != null) {
             future.cancel(true);
             tasks.remove(taskId);
         }

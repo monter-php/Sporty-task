@@ -1,9 +1,8 @@
 package com.tgi.sporty.domain.event;
 
-import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
-
 import com.tgi.sporty.infrastructure.score.ScoreUpdateTasksManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -13,11 +12,11 @@ public class EventStatusService {
     private final ScoreUpdateTasksManager scoreUpdateTasksManager;
 
     public EventStatus updateEventStatus(EventStatusUpdate eventStatusUpdate) {
-        // Validate input
+
         if (eventStatusUpdate == null) {
             throw new IllegalArgumentException("EventStatusUpdate cannot be null");
         }
-        
+
         String eventId = eventStatusUpdate.getEventId();
         EventStatus newStatus = eventStatusUpdate.getEventStatus();
 
@@ -33,7 +32,7 @@ public class EventStatusService {
 
         // check if status is different from eventStatusUpdate variable
         if (currentStatus == null || !currentStatus.equals(newStatus)) {
-            // if differ update event in EventStatusRepository
+            // if different then update event in EventStatusRepository
             eventStatusRepository.setEventStatus(eventId, newStatus);
 
             // if event is live, then start scheduled thread to call score update
@@ -46,7 +45,6 @@ public class EventStatusService {
             }
         }
 
-        // Return updated EventStatus
         return newStatus;
     }
 }

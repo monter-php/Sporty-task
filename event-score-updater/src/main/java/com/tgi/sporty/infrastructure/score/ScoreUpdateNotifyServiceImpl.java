@@ -1,12 +1,11 @@
 package com.tgi.sporty.infrastructure.score;
 
+import com.tgi.sporty.domain.score.ScoreUpdateMessage;
+import com.tgi.sporty.domain.score.ScoreUpdateNotifyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import com.tgi.sporty.domain.score.ScoreUpdateNotifyService;
-import com.tgi.sporty.domain.score.ScoreUpdateMessage;
 
 @Slf4j
 @Service

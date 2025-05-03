@@ -1,9 +1,8 @@
 package com.tgi.sporty.infrastructure.event;
 
-import org.springframework.stereotype.Repository;
-
 import com.tgi.sporty.domain.event.EventStatus;
 import com.tgi.sporty.domain.event.EventStatusRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

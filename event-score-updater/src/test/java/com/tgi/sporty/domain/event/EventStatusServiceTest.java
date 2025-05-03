@@ -1,14 +1,14 @@
 package com.tgi.sporty.domain.event;
 
+import com.tgi.sporty.infrastructure.score.ScoreUpdateTasksManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.tgi.sporty.infrastructure.score.ScoreUpdateTasksManager;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class EventStatusServiceTest {
@@ -132,7 +132,7 @@ public class EventStatusServiceTest {
         verify(scoreUpdateTasksManager, never()).stopTask(anyString());
     }
 
-     @Test
+    @Test
     void testUpdateEventStatus_NullNewStatus_ThrowsIllegalArgumentException() {
         // Arrange
         EventStatusUpdate update = new EventStatusUpdate("event1", null);
@@ -146,6 +146,4 @@ public class EventStatusServiceTest {
         verify(scoreUpdateTasksManager, never()).startTask(anyString());
         verify(scoreUpdateTasksManager, never()).stopTask(anyString());
     }
-
-    // Note: Test for FINISHED status transition is omitted as FINISHED status was not added.
 }
