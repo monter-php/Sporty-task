@@ -55,3 +55,9 @@ This approach ensures tests run in an isolated environment that matches the deve
 
 ## AI Usage
 Some code and documentation were generated or assisted by AI tools (e.g., ChatGPT, GitHub Copilot). All outputs were reviewed and validated.
+
+
+I mostly used AI generation to create unit and integration tests. Then, I verified the code in terms of the test cases.
+I also used AI generation to check the optimal options for solving some problems, such as, for example, retrying the querying of the REST API endpoint `score-service` in the event of transient issues with its operation. For this purpose, I used the `Deep research` functionality from Perplexity.ai.
+
+AI was also used as an aid in creating documentation (basic docs structure and diagrams).
