@@ -7,6 +7,8 @@ This project consists of three main components: an event score updater, a dashbo
 ### Overview
 A Java-based microservice for tracking and updating live sports event scores. The service periodically polls an external REST API for active events scores, transforms the data, and publishes updates to a message broker (e.g., Kafka). It also exposes a REST endpoint for managing event status (live/not live).
 
+More info inside [event-score-updater/README.md](event-score-updater/README.md)
+
 ### Features
 - Periodically calls an external REST API every 10 seconds for live events
 - Transforms and publishes event score updates to a Kafka topic
@@ -19,6 +21,8 @@ A Java-based microservice for tracking and updating live sports event scores. Th
 This dashboard allows for the presentation and control of the entire application in order to demonstrate its functionality.
 It consists of two modules: a user interface using the Streamlit library, which displays information and allows sending status requests for a given event, and a consumer of Kafka messages with results for each event.
 
+More info inside [dashboard/README.md](dashboard/README.md)
+
 ### Main Features
 
 - Enables sending status update requests for an event ("live"/"not live") via a REST interface.
@@ -27,6 +31,8 @@ It consists of two modules: a user interface using the Streamlit library, which 
 ## Score Service
 
 This is a simple Python mock service that provides a REST endpoint to manage and update in-memory event scores.
+
+More info inside [score-service/README.md](score-service/README.md)
 
 ## Setup and Run
 
@@ -46,4 +52,4 @@ This will build the necessary Docker images and start the `dashboard`, `score-se
 
 ## Running tests
 
-Instructions how to run tests are in [event-score-updater/README.md](README.md) file inside event-score-updater directory.
+Instructions how to run tests are in [README.md](event-score-updater/README.md) file inside event-score-updater directory.
